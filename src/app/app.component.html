@@ -1,0 +1,54 @@
+<div class="p-5 pt-2 mt-4" >
+  <h1 class="pb-4">Dynamic Form Builder</h1>
+<div class="border p-3 pt-0" >
+  <div class="d-flex justify-content-between pt-5">
+    <button (click)="addField('text')" class="btn btn-warning">Add Text</button>
+    <button (click)="addField('textarea')" class="btn btn-warning">Add Textarea</button>
+    <button (click)="addField('dropdown')" class="btn btn-warning">Add Dropdown</button>
+    <button (click)="addField('checkbox')" class="btn btn-warning">Add Checkbox</button>
+    <button (click)="addField('radio')" class="btn btn-warning">Add Radio</button>
+  </div>
+
+  <form [formGroup]="dynamicForm" class="row mt-5 ">
+    <div *ngFor="let field of formFields; let i = index" class="col-4 mb-5 d-flex">
+      <div class="col-9 d-flex align-items-center" *ngIf="field.type === 'text'">
+        <label class="form-label me-3">{{ field.label }}</label>
+        <input type="text" class="form-control" [formControlName]="field.name" [placeholder]="field.placeholder" />
+      </div>
+
+      <div class="col-9 d-flex align-items-center" *ngIf="field.type === 'textarea'">
+        <label class="form-label me-3">{{ field.label }}</label>
+        <textarea class="form-control" rows="1" cols="50" [formControlName]="field.name" [placeholder]="field.placeholder"></textarea>
+      </div>
+
+      <div class="col-9 d-flex align-items-center" *ngIf="field.type === 'dropdown'">
+        <label class="form-label me-3">{{ field.label }}</label>
+        <select class="form-control" [formControlName]="field.name">
+          <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+
+      <div class="col-9 d-flex align-items-center" *ngIf="field.type === 'checkbox'">
+        <label class="form-label  m-0">
+          {{ field.label }}
+        </label>
+        <input type="checkbox" class="form-check-input" [formControlName]="field.name" />
+      </div>
+
+      <div class="col-9 d-flex align-items-center" *ngIf="field.type === 'radio'">
+        <label class="form-label m-0">{{ field.label }}</label>
+        <div *ngFor="let option of field.options">
+          <label class="me-3">
+            <input type="radio" class="form-check-input" [value]="option" [formControlName]="field.name" />
+            {{ option }}
+          </label>
+        </div>
+      </div>
+      <button type="button" class="btn btn-danger ms-4" (click)="removeField(i)">Remove</button>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-success " (click)="onSubmit()">Submit</button>
+    </div>  
+  </form>
+</div>
+</div>
