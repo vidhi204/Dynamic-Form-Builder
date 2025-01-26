@@ -19,6 +19,13 @@ export interface FormFields {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  fields = [
+    { type: 'text', label: 'Add Text' },
+    { type: 'textarea', label: 'Add Textarea' },
+    { type: 'dropdown', label: 'Add Dropdown' },
+    { type: 'checkbox', label: 'Add Checkbox' },
+    { type: 'radio', label: 'Add Radio' },
+  ];
   formFields: FormFields[] = [];
   dynamicForm = new FormGroup({});
 
@@ -33,7 +40,7 @@ export class AppComponent {
       validation:{ required: true }
     };
     this.formFields.push(field);
-    this.dynamicForm.addControl(fieldName,new FormControl('', field.validation.required ? Validators.required : null));
+    this.dynamicForm.addControl(fieldName,new FormControl('', field.validation.required ? [Validators.required] : null));
   }
 
   removeField(index: number) {
@@ -43,14 +50,15 @@ export class AppComponent {
   }
 
   onSubmit() {
-    debugger
     if (this.dynamicForm.valid) {
       console.log('Form submitted:', this.dynamicForm.value);
       this.openPopup('success', 'Your form has been submitted successfully!');
       this.dynamicForm.reset();
       this.formFields = [];
     } else {
-      this.openPopup('error', 'Please fill out all required fields.');
+      Object.keys(this.dynamicForm.controls).forEach((controlName) => {
+        this.dynamicForm.get(controlName)?.markAsTouched();
+      });
     }
   }
 
